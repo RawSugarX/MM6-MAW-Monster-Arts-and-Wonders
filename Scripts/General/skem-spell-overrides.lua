@@ -813,11 +813,12 @@ local function modifiedMonsterCalculateDamage(d, def, monsterPointer, attackType
 
 	if attackType == 0 then
 		-- primary attack is calculated correctly
+		damage = damage * DifficultyModifier
 		return damage
 	elseif attackType == 1 then
 		-- secondary attach uses attack1 DamageAdd
 		-- replace Attack1.DamageAdd with Attack2.DamageAdd
-		damage = damage - monster.Attack1.DamageAdd + monster.Attack2.DamageAdd
+		damage = (damage - monster.Attack1.DamageAdd + monster.Attack2.DamageAdd) * DifficultyModifier
 		return damage
 	elseif attackType == 2 and (monster.Spell == 44 or monster.Spell == 95) then
 		-- don't recalculate Mass Distortion or Finger of Death
@@ -827,7 +828,7 @@ local function modifiedMonsterCalculateDamage(d, def, monsterPointer, attackType
 	-- calculate spell damage same way as for party
 
 	local spellSkill, spellMastery = SplitSkill(monster.SpellSkill)
-	damage = Game.CalcSpellDamage(monster.Spell, spellSkill, spellMastery, 0)
+	damage = Game.CalcSpellDamage(monster.Spell, spellSkill, spellMastery, 0) * DifficultyModifier * ((monster.Level/20)+1.75)
 
 	return damage
 
