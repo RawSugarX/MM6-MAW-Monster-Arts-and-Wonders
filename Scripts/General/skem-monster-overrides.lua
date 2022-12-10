@@ -580,7 +580,7 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 
 	oldLevel = math.max(genericForm["Level"],1)
 	offset = calculateTierLevelOffset(genericForm)
-	newLevel = math.max(1, (adaptive_level + offset)*(0.9+(math.random(1,20)+math.random(1,20)-21)/100))
+	newLevel = math.max(1, (adaptive_level + offset)*(0.85+(math.random(1,20)+math.random(1,20)-21)/100)) +math.random(1,5)
 
 	
 	levelMultiplier = ((newLevel) / (oldLevel))^0.5
@@ -589,8 +589,8 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	dicex1 = monsterArray["Attack1"]["DamageDiceCount"]
 	sidesx1 = monsterArray["Attack1"]["DamageDiceSides"]
 	
-	bonusx1 = math.round(monsterArray["Attack1"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
-	sidesx1 = math.round(monsterArray["Attack1"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
+	bonusx1 = math.max(1, (monsterArray["Attack1"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
+	sidesx1 = math.max(1, (monsterArray["Attack1"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
 	dicex1 = math.max(monsterArray["Attack1"]["DamageDiceCount"] * levelMultiplier)
 
 	if bonusx1 > 250 then
@@ -609,9 +609,9 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	dicex2 = monsterArray["Attack2"]["DamageDiceCount"]
 	sidesx2 = monsterArray["Attack2"]["DamageDiceSides"]
 	
-	bonusx2 = math.round(monsterArray["Attack2"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
-	sidesx2 = math.round(monsterArray["Attack2"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
-	dicex2 = math.max(monsterArray["Attack2"]["DamageDiceCount"] * levelMultiplier)
+	bonusx2 = math.max(1, monsterArray["Attack2"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
+	sidesx2 = math.max(1, monsterArray["Attack2"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
+	dicex2 = math.max(1, monsterArray["Attack2"]["DamageDiceCount"] * levelMultiplier)
 
 	if bonusx2 > 250 then
 	sidesx2 = sidesx2 + (bonusx2 - 250) / dicex2
