@@ -513,9 +513,9 @@ function applyMonsterDamageMultipliers(monsterArray, damageMultiplier, rankMulti
 		
 		if (easy_flag == true)
 		then
-			rank = math.max(1, math.floor(rank * rankMultiplier * 60 / 63))
+			rank = math.max(1, math.floor(rank * 1 + 0 * rankMultiplier * 60 / 63))
 		else
-			rank = math.ceil(math.min(rank * rankMultiplier, 60))
+			rank = math.ceil(math.min(rank * 1 + 0 * rankMultiplier, 60))
 		end
 	
 		monsterArray["SpellSkill"] = JoinSkill(rank, mastery)
@@ -575,26 +575,70 @@ end
 
 function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 
+
 	genericForm = Game.MonstersTxt[monsterArray["Id"]]
 
 	oldLevel = math.max(genericForm["Level"],1)
 	offset = calculateTierLevelOffset(genericForm)
-	newLevel = math.max(1, adaptive_level + offset)
+	newLevel = math.max(1, (adaptive_level + offset)*(0.9+(math.random(1,20)+math.random(1,20)-21)/100))
+
+	
+	levelMultiplier = ((newLevel) / (oldLevel))^0.5
+
+	bonusx1 = monsterArray["Attack1"]["DamageAdd"]
+	dicex1 = monsterArray["Attack1"]["DamageDiceCount"]
+	sidesx1 = monsterArray["Attack1"]["DamageDiceSides"]
+	
+	bonusx1 = math.round(monsterArray["Attack1"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
+	sidesx1 = math.round(monsterArray["Attack1"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
+	dicex1 = math.max(monsterArray["Attack1"]["DamageDiceCount"] * levelMultiplier)
+
+	if bonusx1 > 250 then
+	sidesx1 = sidesx1 + (bonusx1 - 250) / dicex1
+	bonusx1 =250
+	end
+	
+	monsterArray["Attack1"]["DamageAdd"] = bonusx1
+	monsterArray["Attack1"]["DamageDiceCount"] = dicex1
+	monsterArray["Attack1"]["DamageDiceSides"] = sidesx1
+
+	if not (monsterArray["Attack2Chance"] == 0)
+	then
+
+	bonusx2 = monsterArray["Attack2"]["DamageAdd"]
+	dicex2 = monsterArray["Attack2"]["DamageDiceCount"]
+	sidesx2 = monsterArray["Attack2"]["DamageDiceSides"]
+	
+	bonusx2 = math.round(monsterArray["Attack2"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
+	sidesx2 = math.round(monsterArray["Attack2"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
+	dicex2 = math.max(monsterArray["Attack2"]["DamageDiceCount"] * levelMultiplier)
+
+	if bonusx2 > 250 then
+	sidesx2 = sidesx2 + (bonusx2 - 250) / dicex2
+	bonusx2 =250
+	end
+	
+	monsterArray["Attack2"]["DamageAdd"] = bonusx2
+	monsterArray["Attack2"]["DamageDiceCount"] = dicex2
+	monsterArray["Attack2"]["DamageDiceSides"] = sidesx2
+
+
+	elseif not (monsterArray["SpellChance"] == 0)
+	then
+		r,m = SplitSkill(monsterArray["SpellSkill"])
+		r = math.max(1, r * levelMultiplier^2)
+		monsterArray["SpellSkill"] = JoinSkill(r,m)
+	end
+
+
+	monsterArray["FullHP"] = math.round(newLevel*(newLevel/10+3))
+
+	monsterArray["HP"] = math.round(newLevel*(newLevel/10+3))
+
+	monsterArray["ArmorClass"] = genericForm["ArmorClass"] * levelMultiplier^2
 	monsterArray["Level"] = newLevel
-	
-	levelMultiplier = (newLevel) / (oldLevel)
-	
-	local damageMultiplier, rankMultiplier = calculateMonsterDamageMultipliers(monsterArray, easy_flag)
-	applyMonsterDamageMultipliers(monsterArray, damageMultiplier, rankMultiplier, easy_flag)
-
-	monsterArray["FullHP"] = genericForm["FullHP"] * levelMultiplier
-
-	monsterArray["HP"] = monsterArray["FullHP"]
-
-	monsterArray["ArmorClass"] = genericForm["ArmorClass"] * levelMultiplier
-
-	monsterArray["Experience"] = genericForm["Experience"] * levelMultiplier
-	monsterArray["TreasureDiceCount"] = genericForm["TreasureDiceCount"] * levelMultiplier
+	monsterArray["Experience"] = genericForm["Experience"] * levelMultiplier^2
+	monsterArray["TreasureDiceCount"] = genericForm["TreasureDiceCount"] * levelMultiplier^2
 	
 	if (adaptive_level > genericForm["Level"])
 	then
@@ -604,7 +648,7 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 			then
 				key = k .. "Resistance"
 				value = monsterArray[key]
-				value = value * (adaptive_level + 100)/(genericForm["Level"] + 100) + (adaptive_level - genericForm["Level"])/2
+				value = value * (adaptive_level + 100)/(genericForm["Level"] + 100) + (adaptive_level - genericForm["Level"])/5
 				monsterArray[key] = value
 			end
 		end
