@@ -18,7 +18,7 @@ local training = {
 
 local spellTxtIds = {}
 
-
+local DifficultyModifier = SETTINGS["DifficultyModifier"]
 
 -- helper functions
 
