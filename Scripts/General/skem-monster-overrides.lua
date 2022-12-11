@@ -589,9 +589,9 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	dicex1 = monsterArray["Attack1"]["DamageDiceCount"]
 	sidesx1 = monsterArray["Attack1"]["DamageDiceSides"]
 	
-	bonusx1 = math.max(1, (monsterArray["Attack1"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
-	sidesx1 = math.max(1, (monsterArray["Attack1"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
-	dicex1 = math.max(monsterArray["Attack1"]["DamageDiceCount"] * levelMultiplier)
+	bonusx1 = math.max(1, (monsterArray["Attack1"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75)))
+	sidesx1 = math.max(1, (monsterArray["Attack1"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75)))
+	dicex1 = math.max(1, (monsterArray["Attack1"]["DamageDiceCount"] * levelMultiplier))
 
 	if bonusx1 > 250 then
 	sidesx1 = sidesx1 + (bonusx1 - 250) / dicex1
@@ -609,9 +609,9 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	dicex2 = monsterArray["Attack2"]["DamageDiceCount"]
 	sidesx2 = monsterArray["Attack2"]["DamageDiceSides"]
 	
-	bonusx2 = math.max(1, monsterArray["Attack2"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75))
-	sidesx2 = math.max(1, monsterArray["Attack2"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75))
-	dicex2 = math.max(1, monsterArray["Attack2"]["DamageDiceCount"] * levelMultiplier)
+	bonusx2 = math.max(1, (monsterArray["Attack2"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75)))
+	sidesx2 = math.max(1, (monsterArray["Attack2"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75)))
+	dicex2 = math.max(1, (monsterArray["Attack2"]["DamageDiceCount"] * levelMultiplier))
 
 	if bonusx2 > 250 then
 	sidesx2 = sidesx2 + (bonusx2 - 250) / dicex2
