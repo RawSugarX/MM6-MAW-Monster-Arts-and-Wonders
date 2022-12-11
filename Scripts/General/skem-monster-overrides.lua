@@ -580,6 +580,10 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 
 	oldLevel = math.max(genericForm["Level"],1)
 	offset = calculateTierLevelOffset(genericForm)
+	
+	Mlevel = monsterArray["Level"]
+
+	if Mlevel == oldLevel
 	newLevel = math.max(1, (adaptive_level + offset)*(0.85+(math.random(1,20)+math.random(1,20)-21)/100)) +math.random(1,5)
 
 	
@@ -655,6 +659,7 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	end
 	
 	Map.Monsters[monsterID] = mergeTables(Map.Monsters[monsterID],monsterArray)
+end
 end
 
 mem.asmpatch(0x431A7D, [[
