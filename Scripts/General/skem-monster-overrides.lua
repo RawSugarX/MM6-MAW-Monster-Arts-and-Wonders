@@ -635,9 +635,9 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	end
 
 
-	monsterArray["FullHP"] = math.round(newLevel*(newLevel/10+3) * baseHealthMultiplier)
+	monsterArray["FullHP"] = math.round(newLevel*(newLevel/10+3) * baseHealthMultiplier) * 2
 
-	monsterArray["HP"] = math.round(newLevel*(newLevel/10+3) * baseHealthMultiplier)
+	monsterArray["HP"] = math.round(newLevel*(newLevel/10+3) * baseHealthMultiplier) * 2
 
 	monsterArray["ArmorClass"] = genericForm["ArmorClass"] * levelMultiplier^2
 	monsterArray["Level"] = newLevel
