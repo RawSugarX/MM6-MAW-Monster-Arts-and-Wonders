@@ -637,7 +637,7 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 
 	monsterArray["ArmorClass"] = genericForm["ArmorClass"] * levelMultiplier^2
 	monsterArray["Level"] = newLevel
-	monsterArray["Experience"] = genericForm["Experience"] * levelMultiplier^2
+	monsterArray["Experience"] = math.round(newLevel*(newLevel+10))
 	monsterArray["TreasureDiceCount"] = genericForm["TreasureDiceCount"] * levelMultiplier^2
 	
 	if (adaptive_level > genericForm["Level"])
