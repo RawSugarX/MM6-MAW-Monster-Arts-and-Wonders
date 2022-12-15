@@ -580,22 +580,22 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 
 	oldLevel = math.max(genericForm["Level"],1)
 	offset = calculateTierLevelOffset(genericForm)
-	
 	Mlevel = monsterArray["Level"]
 
-	if Mlevel == oldLevel
-	newLevel = math.max(1, (adaptive_level + offset)*(0.85+(math.random(1,20)+math.random(1,20)-21)/100)) +math.random(1,5)
+	if Mlevel == oldLevel or adaptive_level > (Mlevel*0.7-5) then
 
-	
-	levelMultiplier = ((newLevel) / (oldLevel))^0.5
+	newLevel = math.max(1,(adaptive_level+ ((offset * (adaptive_level/8/adaptive_level^0.5))+math.random(-2,3)) * (0.85+((math.random(1,20)+math.random(1,adaptive_level)/4-21)/100)) )) +math.random(-3,3)
 
-	bonusx1 = monsterArray["Attack1"]["DamageAdd"]
-	dicex1 = monsterArray["Attack1"]["DamageDiceCount"]
-	sidesx1 = monsterArray["Attack1"]["DamageDiceSides"]
+	levelMultiplier = (newLevel+1) / (oldLevel+1)
 	
-	bonusx1 = math.max(1, (monsterArray["Attack1"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75)))
-	sidesx1 = math.max(1, (monsterArray["Attack1"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75)))
-	dicex1 = math.max(1, (monsterArray["Attack1"]["DamageDiceCount"] * levelMultiplier))
+
+	bonusx1 = genericForm["Attack1"]["DamageAdd"]
+	dicex1 = genericForm["Attack1"]["DamageDiceCount"]
+	sidesx1 = genericForm["Attack1"]["DamageDiceSides"]
+	
+	bonusx1 = math.max(1, (bonusx1 * levelMultiplier * (newLevel/20 + 1.75)))
+	sidesx1 = math.max(1, (sidesx1  * levelMultiplier^0.5 * (newLevel/20 + 1.75)))
+	dicex1 = math.max(1, (dicex1 * levelMultiplier^0.5))
 
 	if bonusx1 > 250 then
 	sidesx1 = sidesx1 + (bonusx1 - 250) / dicex1
@@ -609,13 +609,13 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	if not (monsterArray["Attack2Chance"] == 0)
 	then
 
-	bonusx2 = monsterArray["Attack2"]["DamageAdd"]
-	dicex2 = monsterArray["Attack2"]["DamageDiceCount"]
-	sidesx2 = monsterArray["Attack2"]["DamageDiceSides"]
+	bonusx2 = genericForm["Attack2"]["DamageAdd"]
+	dicex2 = genericForm["Attack2"]["DamageDiceCount"]
+	sidesx2 = genericForm["Attack2"]["DamageDiceSides"]
 	
-	bonusx2 = math.max(1, (monsterArray["Attack2"]["DamageAdd"] * levelMultiplier^2 * (newLevel/20 + 1.75)))
-	sidesx2 = math.max(1, (monsterArray["Attack2"]["DamageDiceSides"] * levelMultiplier * (newLevel/20 + 1.75)))
-	dicex2 = math.max(1, (monsterArray["Attack2"]["DamageDiceCount"] * levelMultiplier))
+	bonusx2 = math.max(1, (bonusx2 * levelMultiplier * (newLevel/20 + 1.75)))
+	sidesx2 = math.max(1, (sidesx2 * levelMultiplier^0.5 * (newLevel/20 + 1.75)))
+	dicex2 = math.max(1, (dicex2 * levelMultiplier^0.5))
 
 	if bonusx2 > 250 then
 	sidesx2 = sidesx2 + (bonusx2 - 250) / dicex2
@@ -629,20 +629,20 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 
 	elseif not (monsterArray["SpellChance"] == 0)
 	then
-		r,m = SplitSkill(monsterArray["SpellSkill"])
-		r = math.max(1, r * levelMultiplier^2)
+		r,m = SplitSkill(genericForm["SpellSkill"])
+		r = math.max(1, math.round(r * levelMultiplier/1.5))
 		monsterArray["SpellSkill"] = JoinSkill(r,m)
 	end
 
 
-	monsterArray["FullHP"] = math.round(newLevel*(newLevel/10+3) * baseHealthMultiplier) * 2
+	monsterArray["FullHP"] = math.round(newLevel*(newLevel/10+3)) * 2
 
-	monsterArray["HP"] = math.round(newLevel*(newLevel/10+3) * baseHealthMultiplier) * 2
+	monsterArray["HP"] = math.round(newLevel*(newLevel/10+3)) * 2
 
-	monsterArray["ArmorClass"] = genericForm["ArmorClass"] * levelMultiplier^2
+	monsterArray["ArmorClass"] = genericForm["ArmorClass"] * levelMultiplier
 	monsterArray["Level"] = newLevel
 	monsterArray["Experience"] = math.round(newLevel*(newLevel+10))
-	monsterArray["TreasureDiceCount"] = genericForm["TreasureDiceCount"] * levelMultiplier^2
+	monsterArray["TreasureDiceCount"] = genericForm["TreasureDiceCount"] * levelMultiplier^1.2
 	
 	if (adaptive_level > genericForm["Level"])
 	then
@@ -651,7 +651,7 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 			if not (k == "Energy")
 			then
 				key = k .. "Resistance"
-				value = monsterArray[key]
+				value = genericForm[key]
 				value = value * (adaptive_level + 100)/(genericForm["Level"] + 100) + (adaptive_level - genericForm["Level"])/5
 				monsterArray[key] = value
 			end
