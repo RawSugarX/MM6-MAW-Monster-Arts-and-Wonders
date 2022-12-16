@@ -828,7 +828,7 @@ local function modifiedMonsterCalculateDamage(d, def, monsterPointer, attackType
 	-- calculate spell damage same way as for party
 
 	local spellSkill, spellMastery = SplitSkill(monster.SpellSkill)
-	damage = Game.CalcSpellDamage(monster.Spell, spellSkill, spellMastery, 0) * DifficultyModifier * ((monster.Level/20)+1.75)
+	damage = Game.CalcSpellDamage(monster.Spell, spellSkill, spellMastery, 0) * DifficultyModifier * ((monster.Level/16)+0.75)
 
 	return damage
 
