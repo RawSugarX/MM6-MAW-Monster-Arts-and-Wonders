@@ -581,8 +581,8 @@ function applyAdaptiveMonsterOverrides(monsterID, monsterArray, adaptive_level)
 	oldLevel = math.max(genericForm["Level"],1)
 	offset = calculateTierLevelOffset(genericForm)
 	Mlevel = monsterArray["Level"]
-
-	if Mlevel == oldLevel or adaptive_level > (Mlevel*0.7-5) then
+	xLevel = (adaptive_level+5+offset/4*adaptive_level^0.2) *((57+math.random(1,30)+math.random(1,30))/100)
+	newLevel = math.max(1, xLevel)
 
 	newLevel = math.max(1,(adaptive_level+ ((offset * (adaptive_level/8/adaptive_level^0.5))+math.random(-2,3)) * (0.85+((math.random(1,20)+math.random(1,adaptive_level)/4-21)/100)) )) +math.random(-3,3)
 
